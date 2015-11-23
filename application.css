@@ -4110,8 +4110,8 @@ select[multiple].input-lg,
 /* line 60, ../../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/_buttons.scss */
 .btn-default {
   color: white;
-  background-color: #666666;
-  border-color: #3F0;
+  background-color: #00FFE4;;
+  border-color: #02B7A4;
 }
 /* line 11, ../../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/mixins/_buttons.scss */
 .btn-default:hover, .btn-default:focus, .btn-default.focus, .btn-default:active, .btn-default.active, .open > .btn-default.dropdown-toggle {
