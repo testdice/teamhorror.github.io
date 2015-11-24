@@ -2981,12 +2981,8 @@ var Footer = React.createClass({
           marginTop: '200px'
         }
       },
-      'Powered by ',
-      el.a(
-        {
-          href: 'https://www.moneypot.com'
-        },
-        'Moneypot'
+      '',
+    
       )
     );
   }
