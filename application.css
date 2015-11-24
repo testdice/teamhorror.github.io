@@ -5140,10 +5140,11 @@ tbody.collapse.in {
   position: relative;
   min-height: 50px;
   margin-bottom: 18px;
-  border: 1px solid transparent;
-  background-color: green;
-  padding-left: -5%;
-  padding-right: -5%;
+  border: 1px solid rgba(0, 242, 255, 1);
+  background-color: rgba(0, 242, 255, 0.5);
+  margin-top: 6px;
+  padding-left: -10%;
+  padding-right: -10%;
 }
 /* line 14, ../../../bower_components/bootstrap-sass-official/assets/stylesheets/bootstrap/mixins/_clearfix.scss */
 .navbar:before, .navbar:after {
@@ -14923,7 +14924,7 @@ textarea + .help-block,
 
 /* line 249, ../../src/sass/_override-bootstrap.scss */
 .btn {
-  color: #FFFFFF;
+  color: #F;
   text-shadow: none;
   -webkit-box-shadow: none;
   box-shadow: none;
