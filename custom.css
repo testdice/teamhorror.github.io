@@ -1026,8 +1026,9 @@ font-size: 600%;
 }
 
 .btn-default:hover {
-  background: url(btnhov.png) no-repeat;
-  background-size: 100% auto
+  background: #000000;
+  color: #00FFE4;
+  border-color: #00FFE4;
 }
 
 .chat-list li {
