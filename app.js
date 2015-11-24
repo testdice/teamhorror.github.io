@@ -24,9 +24,9 @@ var config = {
   house_edge: 0.0099, 
   chat_buffer_size: 30, 
   // - The amount of bets to show on screen in each tab
-  bet_buffer_size: 25
+  bet_buffer_size: 20
 };
-
+ 
 ////////////////////////////////////////////////////////////
 // You shouldn't have to edit anything below this line
 ////////////////////////////////////////////////////////////
