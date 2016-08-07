@@ -6,11 +6,11 @@ var config = {
   // - Your app's id on moneypot.com
   app_id: 689,                             // <----------------------------- EDIT ME!
   // - Displayed in the navbar
-  app_name: 'YOLO' ,
+  app_name: 'teamhorror' ,
   // - For your faucet to work, you must register your site at Recaptcha
   // - https://www.google.com/recaptcha/intro/index.html
   recaptcha_sitekey: '6LdLiBATAAAAAJxq_vT5QGJZ0ONoyh1HdxPGv5e3',  // <----- EDIT ME!
-  redirect_uri: 'https://yolodice.github.io',
+  redirect_uri: 'https://teamhorror.github.io',
   mp_browser_uri: 'https://www.moneypot.com',
   mp_api_uri: 'https://api.moneypot.com',
   chat_uri: '//socket.moneypot.com',
@@ -2467,17 +2467,17 @@ var Tabs = React.createClass({
             'My Bets'
           )
         ),
-      // Display Fairness tab even to guests so that they're aware that
+      // Display Jackpot tab even to guests so that they're aware that
       // this casino has one.
       !config.recaptcha_sitekey ? '' :
         el.li(
-          {className: worldStore.state.currTab === 'FAIRNESS' ? 'active' : ''},
+          {className: worldStore.state.currTab === 'Jackpot' ? 'active' : ''},
           el.a(
             {
               href: 'javascript:void(0)',
-              onClick: this._makeTabChangeHandler('FAIRNESS')
+              onClick: this._makeTabChangeHandler('Jackpot')
             },
-            el.span(null, 'Help & Fairness ')
+            el.span(null, 'Jackpot ')
           )
         ),
       // Display faucet tab even to guests so that they're aware that
@@ -2595,34 +2595,275 @@ var MyBetsTabContent = React.createClass({
   }
 });
 
-var FairnessTabContent = React.createClass({
-  displayName: 'FairnessTabContent',
+var JackpotTabContent = React.createClass({
+  displayName: 'JackpotTabContent',
+  _onStoreChange: function() {
+    this.forceUpdate();
+  },
+  componentDidMount: function() {
+    worldStore.on('app_info_update', this._onStoreChange);
+  },
+  componentWillUnmount: function() {
+    worldStore.off('app_info_update', this._onStoreChange);
+  },
    render: function() {
-        var innerNode;
-      innerNode = el.p(
-        {className: 'navbar-text'},
-                          el.p({className: 'lead'}, " "),
-                          el.p({className: 'lead'}, "Welcome to YOLO"),
-                          el.p({className: 'lead'}, "How do I fund my account?"),
-                          el.p(null, "In order to play you will need a balance.  You can use the free faucet to try out some bets for free or you can fund your MoneyPot account.  You must sign-up for a free anonymus account with MoneyPot in order to play here. After accpunt creation you can send the coins from moneypot wallet here or deposit directly to our site."),
-                          el.p({className: 'lead'}, "How do I play?"),
-                          el.p(null, "After funding your YOLO account, you can change the betamount you want to risk and the multiplier to an amount of your choise. Feel free to change your seed to a number between 0-99999999. By pressing Bet High or Bet Low button you initiate the betting sequence.  The result is shown in the MyBets Tab"),
-                          el.p({className: 'lead'}, "Provable Fairness:"),
-                          el.p(null, "All bets on this site are predetermined and provably fair. If you want to know more about the algorythm we use to generate your bets, you might want to take a look at https://www.moneypot.com/provably-fair "),
-                          el.p({className: 'lead'}, "Legal Disclaimer:"),
-                          el.p(null, "Please ensure that gambling is legal in your jurisdiction, YOLO is an Online Gambling site and may be illegal in some countries.  It is your responsibility to know your local laws.  By using this site you agree that it is legal to do so where you are."),
-                          el.p({className: 'lead'}, "What if I can’t stop?"),
-                          el.p(null, "In case you notice, that you have problems to stop or risk more then you can afford to lose, you will find help at one of the following sites: gamblinghelp.org, ncpgambling.org and helpguide.org YOLO is not responsible for mistaken bets or lost money with MoneyPot."),
-                          el.p(null, " ")
-      );
-
-
+     var jackpotsize1;
+     var jackpotsize2;
+     if (worldStore.state.jackpotlist.lowwins.data[worldStore.state.jackpotlist.lowwins.end] != null){
+        jackpotsize1 = (worldStore.state.currentAppwager - worldStore.state.jackpotlist.highwins.data[worldStore.state.jackpotlist.highwins.end].sitewager) * 0.00045;
+        jackpotsize2 = (worldStore.state.currentAppwager - worldStore.state.jackpotlist.lowwins.data[worldStore.state.jackpotlist.lowwins.end].sitewager) * 0.00045;
+      }else{
+        jackpotsize1 = (worldStore.state.currentAppwager - (worldStore.state.currentAppwager - 2000000000)) * 0.00045;;
+        jackpotsize2 = jackpotsize1;
+      }
      return el.div(
        null,
-       innerNode
+       el.div({className:'panel panel-default'},
+        el.div({className:'panel-body'},
+          el.div({className:'well well-sm col-xs-12'},
+            el.div({className: 'text-center h6'},'Jackpot 1 Size: ',
+              el.span(null,
+                helpers.commafy(helpers.convSatstoCointype(jackpotsize1).toString()) + ' ' + worldStore.state.coin_type
+              )
+            ),
+            el.div({className: 'text-center h6'},'Jackpot 2 Size: ',
+              el.span(null,
+                helpers.commafy(helpers.convSatstoCointype(jackpotsize2).toString()) + ' ' + worldStore.state.coin_type
+              )
+            )
+          ),
+          el.div({className:'well well-sm col-xs-12'},
+            el.div({className: 'text-center'},
+              el.span({className: 'text-center h5', style:{fontWeight:'bold'}}, 'Previous Winners Jackpot 1'),
+              el.table(
+                {className: 'table text-left text-small', style: {fontWeight:'normal',marginTop:'5px'}},
+                el.thead(
+                  null,
+                  el.tr(
+                    null,
+                    el.th(null, 'Date'),
+                    el.th(null, 'User'),
+                    el.th(null, 'Game'
+                    el.th(null, 'Prize'),
+                    el.th(null, 'ID')
+                  )
+                ),
+                el.tbody(
+                  null,
+                  worldStore.state.jackpotlist.highwins.toArray().map(function(list) {
+                    return el.tr(
+                     { key: list.id},
+                       // Time
+                       el.td(
+                         null,
+                         list.created_at.substring(0,10)
+                       ),
+                       // User
+                       el.td(
+                         null,
+                         el.a(
+                           {
+                             href: config.mp_browser_uri + '/users/' + list.uname,
+                             target: '_blank'
+                           },
+                           list.uname
+                         )
+                       ),
+                       // Game
+                       el.td(
+                         null,
+                         list.kind
+                       ),
+                       // Prize
+                       el.td(
+                         null,
+                         helpers.convNumtoStr(list.jprofit) + ' ' + worldStore.state.coin_type
+                       ),
+                      // bet id
+                      el.td(
+                        null,
+                        el.a(
+                          {
+                            href: config.mp_browser_uri + '/bets/' + list.id,
+                            target: '_blank'
+                          },
+                          list.id
+                        )
+                      )
+                    );
+                  }).reverse()
+                )
+              )
+
+            ),
+            el.div({className: 'text-center'},
+              el.span({className: 'text-center h5', style:{fontWeight:'bold'}}, 'Previous Winners Jackpot 2'),
+                el.table(
+                  {className: 'table text-left text-small', style: {fontWeight:'normal',marginTop:'5px'}},
+                  el.thead(
+                    null,
+                    el.tr(
+                      null,
+                      el.th(null, 'Date'),
+                      el.th(null, 'User'),
+                      el.th(null, 'Game'
+                      el.th(null, 'Prize'),
+                      el.th(null, 'ID')
+                    )
+                  ),
+                  el.tbody(
+                    null,
+                    worldStore.state.jackpotlist.lowwins.toArray().map(function(list) {
+                      return el.tr(
+                       { key: list.id},
+                         // Time
+                         el.td(
+                           null,
+                           list.created_at.substring(0,10)
+                         ),
+                         // User
+                         el.td(
+                           null,
+                           el.a(
+                             {
+                               href: config.mp_browser_uri + '/users/' + list.uname,
+                               target: '_blank'
+                             },
+                             list.uname
+                           )
+                         ),
+                         
+                         // Prize
+                         el.td(
+                           null,
+                           helpers.convNumtoStr(list.jprofit) + ' ' + worldStore.state.coin_type
+                         ),
+                        // bet id
+                        el.td(
+                          null,
+                          el.a(
+                            {
+                              href: config.mp_browser_uri + '/bets/' + list.id,
+                              target: '_blank'
+                            },
+                            list.id
+                          )
+                        )
+                      );
+                    }).reverse()
+                  )
+                )
+
+              )
+
+          ),
+          el.div({className:'well well-sm col-xs-12'},
+            el.div({className: 'text-center'},
+              el.span({className: 'text-center h5', style:{fontWeight:'bold'}}, 'Jackpot Rules'),
+              el.p({className:'text-left'},
+                'The Jackpots are available to any user betting on our casino and can be won on any game so you can continue to play your favorite game. The Jackpot amounts are progressive based on the sites wager.'
+                ),// end P
+                el.p({className:'text-left'},
+                  'In order to qualify for Jackpot 1 your bets wager must be at least ',
+                  el.span(null,
+                      helpers.convSatstoCointype(100).toString() + ' ' + worldStore.state.coin_type,
+                      el.span(null,
+                        '.  The winner is determined by the Raw_Outcome of the wager.  A winning bet is one that the Raw_Outcome is greater than 4294963000 for bets ',
+                        el.span(null,
+                          helpers.convSatstoCointype(100000).toString() + ' ' + worldStore.state.coin_type,
+                          el.span(null,
+                            ' and above.  This works out to a chance of 1 in 1 Million Bets.  Bets less than ',
+                            el.span(null,
+                              helpers.convSatstoCointype(100000).toString() + ' ' + worldStore.state.coin_type,
+                              el.span(null,
+                                ' and above ',
+                                el.span(null,
+                                  helpers.convSatstoCointype(100).toString() + ' ' + worldStore.state.coin_type,
+                                  el.span(null,
+                                    ' can still win the jackpot but the lower your wager the more challenging it becomes with ',
+                                    el.span(null,
+                                      helpers.convSatstoCointype(1000).toString() + ' ' + worldStore.state.coin_type,
+                                      el.span(null,
+                                        ' bets having 1% the chance a bet greater than or equal to ',
+                                        el.span(null,
+                                          helpers.convSatstoCointype(100000).toString() + ' ' + worldStore.state.coin_type,
+                                          el.span(null,
+                                              ' has. For example a bet of ',
+                                              el.span(null,
+                                                helpers.convSatstoCointype(1000).toString() + ' ' + worldStore.state.coin_type,
+                                                el.span(null,' has to have a Raw_Outcome > 4294967252 in order to win.'
+                                              )
+                                            )
+                                          )
+                                        )
+                                      )
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                       )
+                    )
+
+                ),//end p
+                el.p({className:'text-left'},
+                  'In order to qualify for Jackpot 2 your bets wager must be at least ',
+                  el.span(null,
+                      helpers.convSatstoCointype(100).toString() + ' ' + worldStore.state.coin_type,
+                      el.span(null,
+                        '.  The winner is determined by the Raw_Outcome of the wager.  A winning bet is one that the Raw_Outcome is less than 4295 for bets ',
+                        el.span(null,
+                          helpers.convSatstoCointype(10000).toString() + ' ' + worldStore.state.coin_type,
+                          el.span(null,
+                            ' and above.  This works out to a chance of 1 in 1 Million Bets.  Bets less than ',
+                            el.span(null,
+                              helpers.convSatstoCointype(10000).toString() + ' ' + worldStore.state.coin_type,
+                              el.span(null,
+                                ' and above ',
+                                el.span(null,
+                                  helpers.convSatstoCointype(100).toString() + ' ' + worldStore.state.coin_type,
+                                  el.span(null,
+                                    ' can still win the jackpot but the lower your wager the more challenging it becomes with ',
+                                    el.span(null,
+                                      helpers.convSatstoCointype(100).toString() + ' ' + worldStore.state.coin_type,
+                                      el.span(null,
+                                        ' bets having 1% the chance a bet greater than or equal to ',
+                                        el.span(null,
+                                          helpers.convSatstoCointype(10000).toString() + ' ' + worldStore.state.coin_type,
+                                          el.span(null,
+                                              ' has. For example a bet of ',
+                                              el.span(null,
+                                                helpers.convSatstoCointype(100).toString() + ' ' + worldStore.state.coin_type,
+                                                el.span(null,' has to have a Raw_Outcome < 42.9 in order to win.'
+                                              )
+                                            )
+                                          )
+                                        )
+                                      )
+                                    )
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                       )
+                    )
+
+                ),//end p
+                el.p({className:'text-left'},
+                  'To be fair to those who have wagered 90% of the Jackpot total will go to the winner and 10% will go to the highest wagered user for the day. The winner of each round will be announced in chat and the prizes will be manually transferred within 8 hours.'
+                )
+            )
+          )
+        )
+       )
      );
    }
-});
+ });
+
 
 
 var FaucetTabContent = React.createClass({
@@ -2958,8 +3199,8 @@ var TabContent = React.createClass({
     switch(worldStore.state.currTab) {
       case 'FAUCET':
         return React.createElement(FaucetTabContent, null);
-          case 'FAIRNESS':
-        return React.createElement(FairnessTabContent, null);
+          case 'Jackpot':
+        return React.createElement(JackpotTabContent, null);
       case 'MY_BETS':
         return React.createElement(MyBetsTabContent, null);
       case 'ALL_BETS':
