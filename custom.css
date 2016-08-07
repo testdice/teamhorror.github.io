@@ -6,7 +6,13 @@
  
 html, body {
   background:url(2.jpg) no-repeat;
-  background-size:100% auto;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  
+
+
 } 
 
 aside { 
